@@ -4,15 +4,22 @@ const num2Input = document.getElementById("num2");
 const resultDiv = document.getElementById("result");
 const buttons = document.querySelectorAll("button");
 
+// Add validation for non-numeric inputs
+const validateInputs = (n1, n2) => {
+  if (isNaN(n1) || isNaN(n2)) {
+    return { valid: false, message: 'Please enter valid numbers' };
+  }
+  if (num1Input.value === '' || num2Input.value === '') {
+    return { valid: false, message: 'Both fields required' };
+  }
+  return { valid: true };
+};
+
+
 // Utility function to get numbers safely
 function getNumbers() {
   const num1 = parseFloat(num1Input.value);
   const num2 = parseFloat(num2Input.value);
-
-  if (isNaN(num1) || isNaN(num2)) {
-    resultDiv.textContent = "Result: Please enter valid numbers";
-    return null;
-  }
 
   return { num1, num2 };
 }
@@ -50,7 +57,13 @@ buttons.forEach(button => {
     }
 
     const numbers = getNumbers();
-    if (!numbers) return;
+const validation = validateInputs(numbers.num1, numbers.num2);
+
+if (!validation.valid) {
+  resultDiv.textContent = `Result: ${validation.message}`;
+  return;
+}
+
 
     const { num1, num2 } = numbers;
     let result;
