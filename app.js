@@ -1,50 +1,76 @@
-// Get DOM elements
+// DOM elements
 const num1Input = document.getElementById("num1");
 const num2Input = document.getElementById("num2");
 const resultDiv = document.getElementById("result");
 const buttons = document.querySelectorAll("button");
 
-// Add validation for non-numeric inputs
-const validateInputs = (n1, n2) => {
-  if (isNaN(n1) || isNaN(n2)) {
-    return { valid: false, message: 'Please enter valid numbers' };
-  }
-  if (num1Input.value === '' || num2Input.value === '') {
-    return { valid: false, message: 'Both fields required' };
-  }
-  return { valid: true };
-};
+// ---------- Helpers ----------
+function showError(message) {
+  resultDiv.textContent = message;
+  resultDiv.classList.add("error");
+}
 
+function showResult(value) {
+  resultDiv.textContent = `Result: ${value}`;
+  resultDiv.classList.remove("error");
+}
 
-// Utility function to get numbers safely
+function formatResult(value) {
+  return Number.isInteger(value) ? value : value.toFixed(2);
+}
+
 function getNumbers() {
-  const num1 = parseFloat(num1Input.value);
-  const num2 = parseFloat(num2Input.value);
-
-  return { num1, num2 };
+  return {
+    num1: parseFloat(num1Input.value),
+    num2: parseFloat(num2Input.value)
+  };
 }
 
-// Math operations
-function add(a, b) {
-  return a + b;
-}
-
-function subtract(a, b) {
-  return a - b;
-}
-
-function multiply(a, b) {
-  return a * b;
-}
-
-function divide(a, b) {
-  if (b === 0) {
-    return "Cannot divide by zero";
+function validateInputs(n1, n2) {
+  if (num1Input.value === "" || num2Input.value === "") {
+    showError("Both fields are required");
+    return false;
   }
-  return a / b;
+  if (isNaN(n1) || isNaN(n2)) {
+    showError("Please enter valid numbers");
+    return false;
+  }
+  return true;
 }
 
-// Event listeners
+// ---------- Operations ----------
+function calculate(op) {
+  const { num1, num2 } = getNumbers();
+
+  if (!validateInputs(num1, num2)) return;
+
+  let result;
+
+  switch (op) {
+    case "add":
+      result = num1 + num2;
+      break;
+    case "subtract":
+      result = num1 - num2;
+      break;
+    case "multiply":
+      result = num1 * num2;
+      break;
+    case "divide":
+      if (num2 === 0) {
+        showError("Cannot divide by zero");
+        return;
+      }
+      result = num1 / num2;
+      break;
+    default:
+      return;
+  }
+
+  showResult(formatResult(result));
+}
+
+// ---------- Button Clicks ----------
 buttons.forEach(button => {
   button.addEventListener("click", () => {
     const operation = button.dataset.op;
@@ -53,36 +79,32 @@ buttons.forEach(button => {
       num1Input.value = "";
       num2Input.value = "";
       resultDiv.textContent = "Result: —";
+      resultDiv.classList.remove("error");
       return;
     }
 
-    const numbers = getNumbers();
-const validation = validateInputs(numbers.num1, numbers.num2);
-
-if (!validation.valid) {
-  resultDiv.textContent = `Result: ${validation.message}`;
-  return;
-}
-
-
-    const { num1, num2 } = numbers;
-    let result;
-
-    switch (operation) {
-      case "add":
-        result = add(num1, num2);
-        break;
-      case "subtract":
-        result = subtract(num1, num2);
-        break;
-      case "multiply":
-        result = multiply(num1, num2);
-        break;
-      case "divide":
-        result = divide(num1, num2);
-        break;
-    }
-
-    resultDiv.textContent = `Result: ${result}`;
+    calculate(operation);
   });
+});
+
+// ---------- Keyboard Support ----------
+document.addEventListener("keydown", (e) => {
+  const keyMap = {
+    "+": "add",
+    "-": "subtract",
+    "*": "multiply",
+    "/": "divide",
+    "Enter": "add"
+  };
+
+  if (keyMap[e.key]) {
+    calculate(keyMap[e.key]);
+  }
+
+  if (e.key === "Escape") {
+    num1Input.value = "";
+    num2Input.value = "";
+    resultDiv.textContent = "Result: —";
+    resultDiv.classList.remove("error");
+  }
 });
