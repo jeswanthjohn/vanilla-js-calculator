@@ -20,7 +20,8 @@ It was built to simulate how even small tools should handle edge cases and user 
   - Subtraction
   - Multiplication
   - Division
-- Clear / reset functionality
+  - Safe handling of JavaScript numeric edge cases (NaN, Infinity)
+  - Clear / reset functionality
 - **Keyboard input support**
   - `+  -  *  /` for operations
   - `Enter` to calculate
