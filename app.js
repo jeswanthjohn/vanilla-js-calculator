@@ -67,8 +67,25 @@ function calculate(op) {
       return;
   }
 
+    // ---------- Numeric edge case handling ----------
+  if (Number.isNaN(result)) {
+    showError("Invalid calculation");
+    return;
+  }
+
+  if (!Number.isFinite(result)) {
+    showError("Result exceeds safe numeric limits");
+    return;
+  }
+
+  // Handle negative zero (-0)
+  if (Object.is(result, -0)) {
+    result = 0;
+  }
+
   showResult(formatResult(result));
 }
+
 
 // ---------- Button Clicks ----------
 buttons.forEach(button => {
