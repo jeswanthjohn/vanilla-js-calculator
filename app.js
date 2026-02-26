@@ -28,15 +28,54 @@ function clearAll() {
   resultDiv.classList.remove("error");
 }
 
+// ---------- Validation Utilities ----------
+
+const operators = ["+", "-", "*", "/"];
+
+function getLastNumberSegment(expression) {
+  const parts = expression.split(/[+\-*/]/);
+  return parts[parts.length - 1];
+}
+
 // ---------- Expression Handling ----------
 
 function appendToExpression(value) {
-  const operators = ["+", "-", "*", "/"];
   const lastChar = currentExpression.slice(-1);
+
+  // Prevent starting with invalid operators (* or /)
+  if (
+    currentExpression === "" &&
+    (value === "*" || value === "/")
+  ) {
+    return;
+  }
+
+  // Allow starting with minus (negative number)
+  if (currentExpression === "" && value === "-") {
+    currentExpression += value;
+    display.value = currentExpression;
+    return;
+  }
 
   // Prevent double operators
   if (operators.includes(value) && operators.includes(lastChar)) {
     return;
+  }
+
+  // Prevent multiple decimals in the same number
+  if (value === ".") {
+    const lastNumber = getLastNumberSegment(currentExpression);
+
+    if (lastNumber.includes(".")) {
+      return;
+    }
+
+    // Prevent starting a number with just "."
+    if (lastNumber === "" || operators.includes(lastChar)) {
+      currentExpression += "0.";
+      display.value = currentExpression;
+      return;
+    }
   }
 
   currentExpression += value;
@@ -45,14 +84,16 @@ function appendToExpression(value) {
 
 function evaluateExpression() {
   try {
-    if (!currentExpression) return;
+    if (!currentExpression) {
+      showError("Expression is empty");
+      return;
+    }
 
-    const operators = ["+", "-", "*", "/"];
     const lastChar = currentExpression.slice(-1);
 
-    // Prevent ending with operator
-    if (operators.includes(lastChar)) {
-      showError("Expression cannot end with operator");
+    // Prevent ending with operator or decimal
+    if (operators.includes(lastChar) || lastChar === ".") {
+      showError("Incomplete expression");
       return;
     }
 
