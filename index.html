@@ -1,27 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <title>Simple Calculator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
 
     <div class="calculator">
         <h1>Simple Calculator</h1>
 
-        <input type="number" id="num1" placeholder="Enter first number" />
-        <input type="number" id="num2" placeholder="Enter second number" />
+        <input 
+            type="text" 
+            id="display" 
+            class="display" 
+            placeholder="0"
+            readonly 
+            aria-label="Calculator display"
+        />
 
         <div class="buttons">
-            <button data-op="add">+</button>
-            <button data-op="subtract">−</button>
-            <button data-op="multiply">×</button>
-            <button data-op="divide">÷</button>
-            <button data-op="clear" class="clear">Clear</button>
+            <button class="btn operator">/</button>
+            <button class="btn operator">*</button>
+            <button class="btn operator">-</button>
+            <button class="btn operator">+</button>
+
+            <button class="btn">7</button>
+            <button class="btn">8</button>
+            <button class="btn">9</button>
+
+            <button class="btn">4</button>
+            <button class="btn">5</button>
+            <button class="btn">6</button>
+
+            <button class="btn">1</button>
+            <button class="btn">2</button>
+            <button class="btn">3</button>
+
+            <button class="btn">0</button>
+            <button class="btn">.</button>
+
+            <button class="btn equals">=</button>
+            <button class="btn clear">C</button>
         </div>
 
         <div id="result">Result: —</div>
@@ -29,5 +50,4 @@
 
     <script src="app.js"></script>
 </body>
-
 </html>
