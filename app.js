@@ -5,6 +5,9 @@ const buttons = document.querySelectorAll(".btn");
 
 let currentExpression = "";
 
+// precision control
+const MAX_DECIMALS = 10;
+
 // ---------- Helpers ----------
 
 function showError(message) {
@@ -17,8 +20,15 @@ function showResult(value) {
   resultDiv.classList.remove("error");
 }
 
+// Improved floating-point precision normalization
 function formatResult(value) {
-  return Number.isInteger(value) ? value : value.toFixed(2);
+  const normalized = Number.parseFloat(
+    Number(value).toFixed(MAX_DECIMALS)
+  );
+
+  return Number.isInteger(normalized)
+    ? normalized
+    : normalized.toString();
 }
 
 function clearAll() {
@@ -100,6 +110,7 @@ function evaluateExpression() {
     const result = Function(`"use strict"; return (${currentExpression})`)();
 
     // ---------- Numeric edge case handling ----------
+
     if (Number.isNaN(result)) {
       showError("Invalid calculation");
       return;
