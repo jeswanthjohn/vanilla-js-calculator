@@ -3,9 +3,12 @@ const display = document.getElementById("display");
 const resultDiv = document.getElementById("result");
 const buttons = document.querySelectorAll(".btn");
 
-let currentExpression = "";
+const historyList = document.getElementById("history-list");
+const clearHistoryBtn = document.getElementById("clear-history");
 
-// precision control
+let currentExpression = "";
+let history = [];
+
 const MAX_DECIMALS = 10;
 
 // ---------- Helpers ----------
@@ -20,7 +23,6 @@ function showResult(value) {
   resultDiv.classList.remove("error");
 }
 
-// Improved floating-point precision normalization
 function formatResult(value) {
   const normalized = Number.parseFloat(
     Number(value).toFixed(MAX_DECIMALS)
@@ -38,6 +40,32 @@ function clearAll() {
   resultDiv.classList.remove("error");
 }
 
+function addToHistory(expression, result) {
+  const timestamp = new Date().toLocaleTimeString();
+
+  history.unshift({
+    expression,
+    result,
+    timestamp
+  });
+
+  if (history.length > 10) {
+    history.pop();
+  }
+
+  renderHistory();
+}
+
+function renderHistory() {
+  historyList.innerHTML = "";
+
+  history.forEach(entry => {
+    const li = document.createElement("li");
+    li.textContent = `${entry.expression} = ${entry.result} (${entry.timestamp})`;
+    historyList.appendChild(li);
+  });
+}
+
 // ---------- Validation Utilities ----------
 
 const operators = ["+", "-", "*", "/"];
@@ -52,7 +80,6 @@ function getLastNumberSegment(expression) {
 function appendToExpression(value) {
   const lastChar = currentExpression.slice(-1);
 
-  // Prevent starting with invalid operators (* or /)
   if (
     currentExpression === "" &&
     (value === "*" || value === "/")
@@ -60,19 +87,16 @@ function appendToExpression(value) {
     return;
   }
 
-  // Allow starting with minus (negative number)
   if (currentExpression === "" && value === "-") {
     currentExpression += value;
     display.value = currentExpression;
     return;
   }
 
-  // Prevent double operators
   if (operators.includes(value) && operators.includes(lastChar)) {
     return;
   }
 
-  // Prevent multiple decimals in the same number
   if (value === ".") {
     const lastNumber = getLastNumberSegment(currentExpression);
 
@@ -80,7 +104,6 @@ function appendToExpression(value) {
       return;
     }
 
-    // Prevent starting a number with just "."
     if (lastNumber === "" || operators.includes(lastChar)) {
       currentExpression += "0.";
       display.value = currentExpression;
@@ -101,15 +124,12 @@ function evaluateExpression() {
 
     const lastChar = currentExpression.slice(-1);
 
-    // Prevent ending with operator or decimal
     if (operators.includes(lastChar) || lastChar === ".") {
       showError("Incomplete expression");
       return;
     }
 
     const result = Function(`"use strict"; return (${currentExpression})`)();
-
-    // ---------- Numeric edge case handling ----------
 
     if (Number.isNaN(result)) {
       showError("Invalid calculation");
@@ -123,6 +143,7 @@ function evaluateExpression() {
 
     if (Object.is(result, -0)) {
       showResult(0);
+      addToHistory(currentExpression, 0);
       currentExpression = "0";
       display.value = "0";
       return;
@@ -131,6 +152,8 @@ function evaluateExpression() {
     const formatted = formatResult(result);
 
     showResult(formatted);
+    addToHistory(currentExpression, formatted);
+
     currentExpression = formatted.toString();
     display.value = currentExpression;
 
@@ -178,4 +201,11 @@ document.addEventListener("keydown", (e) => {
     currentExpression = currentExpression.slice(0, -1);
     display.value = currentExpression;
   }
+});
+
+// ---------- Clear History ----------
+
+clearHistoryBtn.addEventListener("click", () => {
+  history = [];
+  renderHistory();
 });
