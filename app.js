@@ -1,3 +1,6 @@
+import { formatResult } from "./js/formatter.js";
+import { operators, getLastNumberSegment, canAppendOperator, canAppendDecimal } from "./js/validator.js";
+
 // DOM elements
 const display = document.getElementById("display");
 const resultDiv = document.getElementById("result");
@@ -8,8 +11,6 @@ const clearHistoryBtn = document.getElementById("clear-history");
 
 let currentExpression = "";
 let history = [];
-
-const MAX_DECIMALS = 10;
 
 // ---------- Helpers ----------
 
@@ -23,16 +24,6 @@ function showResult(value) {
   resultDiv.classList.remove("error");
 }
 
-function formatResult(value) {
-  const normalized = Number.parseFloat(
-    Number(value).toFixed(MAX_DECIMALS)
-  );
-
-  return Number.isInteger(normalized)
-    ? normalized
-    : normalized.toString();
-}
-
 function clearAll() {
   currentExpression = "";
   display.value = "";
@@ -43,11 +34,7 @@ function clearAll() {
 function addToHistory(expression, result) {
   const timestamp = new Date().toLocaleTimeString();
 
-  history.unshift({
-    expression,
-    result,
-    timestamp
-  });
+  history.unshift({ expression, result, timestamp });
 
   if (history.length > 10) {
     history.pop();
@@ -66,45 +53,18 @@ function renderHistory() {
   });
 }
 
-// ---------- Validation Utilities ----------
-
-const operators = ["+", "-", "*", "/"];
-
-function getLastNumberSegment(expression) {
-  const parts = expression.split(/[+\-*/]/);
-  return parts[parts.length - 1];
-}
-
 // ---------- Expression Handling ----------
 
 function appendToExpression(value) {
-  const lastChar = currentExpression.slice(-1);
 
-  if (
-    currentExpression === "" &&
-    (value === "*" || value === "/")
-  ) {
-    return;
-  }
-
-  if (currentExpression === "" && value === "-") {
-    currentExpression += value;
-    display.value = currentExpression;
-    return;
-  }
-
-  if (operators.includes(value) && operators.includes(lastChar)) {
-    return;
-  }
+  if (!canAppendOperator(currentExpression, value)) return;
 
   if (value === ".") {
-    const lastNumber = getLastNumberSegment(currentExpression);
+    const decimalCheck = canAppendDecimal(currentExpression);
 
-    if (lastNumber.includes(".")) {
-      return;
-    }
+    if (!decimalCheck) return;
 
-    if (lastNumber === "" || operators.includes(lastChar)) {
+    if (decimalCheck === "prefix") {
       currentExpression += "0.";
       display.value = currentExpression;
       return;
@@ -117,6 +77,7 @@ function appendToExpression(value) {
 
 function evaluateExpression() {
   try {
+
     if (!currentExpression) {
       showError("Expression is empty");
       return;
@@ -183,6 +144,7 @@ buttons.forEach(button => {
 // ---------- Keyboard Support ----------
 
 document.addEventListener("keydown", (e) => {
+
   const allowedKeys = "0123456789+-*/.";
 
   if (allowedKeys.includes(e.key)) {
