@@ -8,51 +8,60 @@
 </head>
 <body>
 
-    <div class="calculator">
+    <div class="calculator" role="application" aria-label="Simple calculator">
         <h1>Simple Calculator</h1>
 
         <input 
-            type="text" 
-            id="display" 
-            class="display" 
+            type="text"
+            id="display"
+            class="display"
             placeholder="0"
-            readonly 
+            readonly
             aria-label="Calculator display"
+            aria-live="polite"
         />
 
-        <div class="buttons">
-            <button class="btn operator">/</button>
-            <button class="btn operator">*</button>
-            <button class="btn operator">-</button>
-            <button class="btn operator">+</button>
+        <div class="buttons" role="group" aria-label="Calculator keypad">
 
-            <button class="btn">7</button>
-            <button class="btn">8</button>
-            <button class="btn">9</button>
+            <button class="btn operator" aria-label="Divide">/</button>
+            <button class="btn operator" aria-label="Multiply">*</button>
+            <button class="btn operator" aria-label="Subtract">-</button>
+            <button class="btn operator" aria-label="Add">+</button>
 
-            <button class="btn">4</button>
-            <button class="btn">5</button>
-            <button class="btn">6</button>
+            <button class="btn" aria-label="Seven">7</button>
+            <button class="btn" aria-label="Eight">8</button>
+            <button class="btn" aria-label="Nine">9</button>
 
-            <button class="btn">1</button>
-            <button class="btn">2</button>
-            <button class="btn">3</button>
+            <button class="btn" aria-label="Four">4</button>
+            <button class="btn" aria-label="Five">5</button>
+            <button class="btn" aria-label="Six">6</button>
 
-            <button class="btn">0</button>
-            <button class="btn">.</button>
+            <button class="btn" aria-label="One">1</button>
+            <button class="btn" aria-label="Two">2</button>
+            <button class="btn" aria-label="Three">3</button>
 
-            <button class="btn equals">=</button>
-            <button class="btn clear">C</button>
+            <button class="btn" aria-label="Zero">0</button>
+            <button class="btn" aria-label="Decimal point">.</button>
+
+            <button class="btn equals" aria-label="Calculate result">=</button>
+            <button class="btn clear" aria-label="Clear calculator">C</button>
+
         </div>
 
-        <div id="result">Result: —</div>
+        <div id="result" aria-live="polite">
+            Result: —
+        </div>
 
         <div class="history-container">
             <div class="history-header">
                 <h2>History</h2>
-                <button id="clear-history">Clear</button>
+                <button id="clear-history" aria-label="Clear calculation history">
+                    Clear
+                </button>
             </div>
-            <ul id="history-list"></ul>
+
+            <ul id="history-list" aria-live="polite" aria-label="Calculation history">
+            </ul>
         </div>
 
     </div>
