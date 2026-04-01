@@ -7,9 +7,26 @@ Unlike basic calculators, this application evaluates full expressions (e.g., `12
 ---
 
 ## 🚀 Live Demo
+
 👉 https://vanilla-js-calculator-jeswanth.netlify.app
 
 ---
+
+## 🎯 Problem & Motivation
+
+Most basic calculator implementations rely on evaluating two inputs at a time, which does not reflect real user behavior.
+
+Users expect to:
+
+- Enter continuous expressions (e.g., `12 + 5 * 3`)
+- See predictable results with correct operator precedence
+- Avoid crashes from invalid inputs
+
+This project was designed to simulate real-world calculator behavior by:
+
+- Supporting full expression evaluation
+- Preventing invalid states before computation
+- Ensuring consistent and safe output handling
 
 ## 📌 Overview
 
@@ -18,7 +35,6 @@ This calculator evolved from a basic dual-input tool into a **dynamic expression
 The focus of this project is not just performing calculations, but handling **invalid states**, **floating-point precision issues**, and **user interaction edge cases** in a predictable and maintainable way.
 
 It demonstrates how even a simple UI tool can be designed with **validation layers**, **modular logic**, and **clear data flow**.
----
 
 ## ✨ Features
 
@@ -39,34 +55,91 @@ It demonstrates how even a simple UI tool can be designed with **validation laye
 
 ## 🧠 Application Flow & Architecture
 
-The calculator follows a structured data flow:
+The application follows a controlled data flow pipeline:
 
-User Input → Event Handlers → Expression Validation → Evaluation Engine → Result Formatting → UI Update → History Storage
+User Input  
+→ Event Handlers (button clicks / keyboard input)  
+→ Expression Builder (constructs input string)  
+→ Validation Layer (prevents invalid sequences)  
+→ Evaluation Engine (`eval` with safeguards)  
+→ Result Formatter (handles floating-point precision)  
+→ UI Renderer (updates display)  
+→ History Manager (stores past calculations)
 
-- Validation layer prevents invalid expressions before evaluation  
-- Evaluation logic ensures safe computation  
-- Formatting layer handles floating-point inconsistencies  
-- UI updates are separated from logic for maintainability
+### Key Principle:
+
+Each stage is isolated to ensure:
+
+- Invalid data is blocked early
+- Logic remains testable and maintainable
+- UI is decoupled from computation
 
 ---
 
 ## ⚙️ Key Engineering Decisions
 
-- Moved from dual-input model to expression-based evaluation for better usability  
-- Introduced validation layer to prevent invalid operator sequences  
-- Implemented formatting utilities to normalize floating-point errors  
-- Separated logic into modular functions for maintainability 
-- Extracted validation and formatting into reusable utility modules to improve code organization 
+- **Expression-Based Evaluation over Dual Input**
+  - Allows flexible and natural user interaction
+  - Supports operator precedence automatically
+
+- **Validation Before Evaluation**
+  - Prevents runtime errors instead of reacting to them
+  - Ensures predictable system behavior
+
+- **Separation of Concerns**
+  - Input handling, validation, evaluation, and UI updates are modularized
+  - Improves maintainability and debugging
+
+- **Controlled Use of `eval`**
+  - Used only after strict validation to balance simplicity and safety
 
 ---
 
-## ⚠️ Edge Case Handling
+## ⚙️ Technical Challenges & Solutions
 
-- Prevents multiple consecutive operators (`++`, `--`)  
-- Handles division by zero safely  
-- Normalizes floating-point precision issues  
-- Handles empty or incomplete expressions  
-- Prevents unsafe evaluations (`NaN`, `Infinity`)  
+### 1. Handling Invalid Operator Sequences
+
+**Problem:** Users can input invalid expressions like `12 ++ 5`  
+**Solution:** Implemented validation rules to restrict consecutive operators
+
+---
+
+### 2. Floating-Point Precision Errors
+
+**Problem:** JavaScript produces inaccurate results (e.g., `0.1 + 0.2 = 0.30000000000000004`)  
+**Solution:** Added normalization logic to format results to a fixed precision
+
+---
+
+### 3. Safe Expression Evaluation
+
+**Problem:** Direct use of `eval` can lead to unsafe execution  
+**Solution:** Restricted input via validation layer to ensure only safe expressions are evaluated
+
+---
+
+### 4. Edge Case Handling
+
+**Problem:** Empty input, division by zero, incomplete expressions  
+**Solution:** Introduced pre-validation checks before evaluation
+
+---
+
+## 📌 Engineering Highlights
+
+- Designed a validation-first approach to prevent invalid computation states
+- Handled JavaScript floating-point precision issues with controlled normalization
+- Structured logic into modular layers for maintainability and clarity
+- Ensured safe evaluation by sanitizing expressions before execution
+
+---
+## ⚠️ Handling Invalid and Incomplete Inputs
+
+- Prevents multiple consecutive operators (`++`, `--`)
+- Handles division by zero safely
+- Normalizes floating-point precision issues
+- Handles empty or incomplete expressions
+- Prevents unsafe evaluations (`NaN`, `Infinity`)
 
 ---
 
@@ -88,24 +161,24 @@ vanilla-js-calculator/
 ├── app.js       # Calculator logic and event handling
 └── README.md    # Project documentation
 ```
+
 ## 🎯 Learning Outcomes
- - Through this project, I practiced and reinforced:
-  - Separation of concerns between HTML, CSS, and JavaScript
-  - DOM selection and event handling
-  - Defensive programming (validation and edge cases)
-  - Keyboard accessibility
-  - User-friendly error handling
-  - Incremental feature enhancement
-  - Deploying and maintaining a live frontend project
 
-
+- Through this project, I practiced and reinforced:
+- Separation of concerns between HTML, CSS, and JavaScript
+- DOM selection and event handling
+- Defensive programming (validation and edge cases)
+- Keyboard accessibility
+- User-friendly error handling
+- Incremental feature enhancement
+- Deploying and maintaining a live frontend project
 
 ## 📌 Possible Enhancements
 
-- Support for parentheses and complex expressions  
-- Scientific operations (sqrt, power, trigonometry)  
-- Persistent history using localStorage  
-- Theme toggle (dark / light mode)  
+- Support for parentheses and complex expressions
+- Scientific operations (sqrt, power, trigonometry)
+- Persistent history using localStorage
+- Theme toggle (dark / light mode)
 
 ## 👤 Author
 
