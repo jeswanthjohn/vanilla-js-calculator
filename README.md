@@ -175,10 +175,50 @@ vanilla-js-calculator/
 
 ## 📌 Possible Enhancements
 
-- Support for parentheses and complex expressions
-- Scientific operations (sqrt, power, trigonometry)
-- Persistent history using localStorage
-- Theme toggle (dark / light mode)
+### 1. Replace `eval` with Custom Expression Parser
+- Current implementation relies on controlled `eval`
+- A custom parser (e.g., Shunting Yard Algorithm) would:
+  - Improve security
+  - Enable support for parentheses and complex expressions
+  - Provide full control over evaluation logic
+
+---
+
+### 2. Extend Expression Support
+- Add support for:
+  - Parentheses `()`
+  - Exponents and advanced operators
+- Requires updating validation and parsing logic
+
+---
+
+### 3. Persistent History with State Management
+- Move history storage from in-memory to `localStorage`
+- Add ability to:
+  - Reload past sessions
+  - Reuse previous calculations
+
+---
+
+### 4. Input Optimization & UX Improvements
+- Implement input debouncing for keyboard handling
+- Improve cursor-based editing within expressions
+- Add inline error feedback instead of silent blocking
+
+---
+
+### 5. Performance & Scalability Improvements
+- Optimize validation logic for larger expressions
+- Introduce memoization for repeated calculations
+- Reduce unnecessary DOM updates
+
+---
+
+### 6. Advanced Accessibility Enhancements
+- Improve screen reader feedback for dynamic results
+- Add focus management for keyboard navigation
+
+---
 
 ## 👤 Author
 
