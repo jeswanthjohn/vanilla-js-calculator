@@ -142,6 +142,19 @@ Each stage is isolated to ensure:
 - Prevents unsafe evaluations (`NaN`, `Infinity`)
 
 ---
+## 🧪 Tested Scenarios
+
+- Floating-point calculations (`0.1 + 0.2`)
+- Consecutive operator prevention (`++`, `--`)
+- Division by zero handling
+- Empty and incomplete expressions
+- Keyboard-based interactions
+- Rapid sequential input handling
+- Invalid expression blocking
+- Safe handling of `NaN` and `Infinity`
+- Responsive layout testing across mobile and desktop
+
+---
 
 ## 🛠 Tech Stack
 
