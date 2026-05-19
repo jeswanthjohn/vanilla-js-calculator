@@ -125,7 +125,7 @@ Each stage is isolated to ensure:
 
 ---
 
-## 📌 Engineering Highlights
+## 📌 Implementation Highlights
 
 - Designed a validation-first approach to prevent invalid computation states
 - Handled JavaScript floating-point precision issues with controlled normalization
@@ -207,7 +207,7 @@ vanilla-js-calculator/
 
 ---
 
-### 5. Performance & Scalability Improvements
+### 5. Performance & Optimization Improvements
 - Optimize validation logic for larger expressions
 - Introduce memoization for repeated calculations
 - Reduce unnecessary DOM updates
